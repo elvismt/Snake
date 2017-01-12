@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <title>Snake</title>
+
+    <style>
+        * {
+            margin: 0 0;
+            padding: 0 0;
+        }
+        .board {
+            margin: 40px;
+            background-color: #eee;
+        }
+        .cell {
+            display: inline-block;
+            background-color: #f00;
+        }
+    </style>
+</head>
+<body>
+
+    <script>
+        const numCols = 20,
+              numRows = 34,
+              numCells = numCols * numRows,
+              cellLength = 10,
+              cellMargin = 1;
+
+        // create board
+        var board = document.createElement('div');
+        board.className = 'board';
+        board.style.maxWidth = parseInt(numCols*(cellLength+cellMargin)) + 'px';
+        board.style.lineHeight = parseInt(cellLength+cellMargin) + 'px';
+        document.body.append(board);
+
+        // create cells
+        cells = [];
+        for (let i=0; i<numCells; ++i) {
+            let cell = document.createElement('div');
+
+            cell.className = 'cell';
+            cell.style.width = cell.style.height = parseInt(cellLength) + 'px';
+            cell.style.marginTop = cell.style.marginLeft = parseInt(cellMargin) + 'px';
+
+            board.append(cell);
+            cells.push(cell);
+        }
+
+        // cell accessor
+        function cell (i, j) {
+            return cells[i * numCols + j];
+        }
+
+
+    </script>
+</body>
+</html>
+
