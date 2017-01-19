@@ -14,7 +14,15 @@
         }
         .cell {
             display: inline-block;
+        }
+        .cell-empty {
             background-color: #f00;
+        }
+        .cell-full {
+            background-color: #00f;
+        }
+        myelement {
+            background: black;
         }
     </style>
 </head>
@@ -27,33 +35,70 @@
               cellLength = 10,
               cellMargin = 1;
 
-        // create board
+        // create board cells
         var board = document.createElement('div');
         board.className = 'board';
         board.style.maxWidth = parseInt(numCols*(cellLength+cellMargin)) + 'px';
         board.style.lineHeight = parseInt(cellLength+cellMargin) + 'px';
         document.body.append(board);
-
-        // create cells
         cells = [];
-        for (let i=0; i<numCells; ++i) {
-            let cell = document.createElement('div');
+        (function () {
+            for (let i=0; i<numCells; ++i) {
+                let cell = document.createElement('div');
 
-            cell.className = 'cell';
-            cell.style.width = cell.style.height = parseInt(cellLength) + 'px';
-            cell.style.marginTop = cell.style.marginLeft = parseInt(cellMargin) + 'px';
+                cell.className = 'cell cell-empty';
+                cell.style.width = cell.style.height = parseInt(cellLength) + 'px';
+                cell.style.marginTop = cell.style.marginLeft = parseInt(cellMargin) + 'px';
 
-            board.append(cell);
-            cells.push(cell);
-        }
+                board.append(cell);
+                cells.push(cell);
+            }
+        })();
 
         // cell accessor
-        function cell (i, j) {
-            return cells[i * numCols + j];
+        function cell (pos) {
+            return cells[pos.y * numCols + pos.x];
         }
 
+        // init snake
+        var snake = [{x:1, y:1}, {x:2, y:1}, {x:3, y:1}];
+        var velocity = 'right';
+        (function () {
+            for (let c of snake) {
+                cell(c).className = 'cell cell-full';
+            }
+        })();
+
+        function checkColision() {
+            // TODO
+        }
+
+        function walkSnake() {
+            let tail = snake[0];
+            let head = snake[snake.length-1];
+            let newHead = {x:head.x, y:head.y};
+
+            cell(tail).className = 'cell cell-empty';
+            snake.shift();
+
+            if (velocity === 'right') newHead.x += 1;
+            else if (velocity === 'left') newHead.x -= 1;
+            else if (velocity === 'up') newHead.y -= 1;
+            else if (velocity === 'down') newHead.y += 1;
+
+            snake.push(newHead);
+            cell(newHead).className = 'cell cell-full';
+
+            checkColision();
+        }
+
+        // start game
+        (function () {
+            setInterval(function () {
+                walkSnake();
+            }, 500);
+        })();
 
     </script>
 </body>
 </html>
-
